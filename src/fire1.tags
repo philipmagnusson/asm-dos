@@ -1,0 +1,73 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/home/philip/dev/asm-dos/src/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	//
+COLOR_BLUE	/home/philip/dev/asm-dos/src/fire1.asm	/^COLOR_BLUE      equ 0x09$/;"	d
+COLOR_CYAN	/home/philip/dev/asm-dos/src/fire1.asm	/^COLOR_CYAN      equ 0x0B$/;"	d
+COLOR_GRAY	/home/philip/dev/asm-dos/src/fire1.asm	/^COLOR_GRAY      equ 0x08$/;"	d
+COLOR_GREEN	/home/philip/dev/asm-dos/src/fire1.asm	/^COLOR_GREEN     equ 0x0A$/;"	d
+COLOR_MAGENTA	/home/philip/dev/asm-dos/src/fire1.asm	/^COLOR_MAGENTA   equ 0x0D$/;"	d
+COLOR_NORMAL	/home/philip/dev/asm-dos/src/fire1.asm	/^COLOR_NORMAL    equ 0x07$/;"	d
+COLOR_RED	/home/philip/dev/asm-dos/src/fire1.asm	/^COLOR_RED       equ 0x0C$/;"	d
+COLOR_WHITE	/home/philip/dev/asm-dos/src/fire1.asm	/^COLOR_WHITE     equ 0x0F$/;"	d
+COLOR_YELLOW	/home/philip/dev/asm-dos/src/fire1.asm	/^COLOR_YELLOW    equ 0x0E$/;"	d
+FIRE_HEIGHT	/home/philip/dev/asm-dos/src/fire1.asm	/^FIRE_HEIGHT            equ 20$/;"	d
+FIRE_PATTERN_COUNT	/home/philip/dev/asm-dos/src/fire1.asm	/^FIRE_PATTERN_COUNT equ 4$/;"	d
+FIRE_PATTERN_SIZE	/home/philip/dev/asm-dos/src/fire1.asm	/^FIRE_PATTERN_SIZE  equ FIRE_WIDTH$/;"	d
+FIRE_SIZE	/home/philip/dev/asm-dos/src/fire1.asm	/^FIRE_SIZE              equ FIRE_WIDTH * FIRE_HEIGHT$/;"	d
+FIRE_WIDTH	/home/philip/dev/asm-dos/src/fire1.asm	/^FIRE_WIDTH             equ 40$/;"	d
+MAX_COL	/home/philip/dev/asm-dos/src/fire1.asm	/^MAX_COL         equ 79$/;"	d
+MAX_ROW	/home/philip/dev/asm-dos/src/fire1.asm	/^MAX_ROW         equ 24$/;"	d
+MIN_COL	/home/philip/dev/asm-dos/src/fire1.asm	/^MIN_COL         equ 1$/;"	d
+MIN_ROW	/home/philip/dev/asm-dos/src/fire1.asm	/^MIN_ROW         equ 1$/;"	d
+SCREEN_COLS	/home/philip/dev/asm-dos/src/fire1.asm	/^SCREEN_COLS     equ 80$/;"	d
+SCREEN_SEG	/home/philip/dev/asm-dos/src/fire1.asm	/^SCREEN_SEG      equ 0x0B800$/;"	d
+add	/home/philip/dev/asm-dos/src/fire1.asm	/^    add di, FIRE_WIDTH * (FIRE_HEIGHT - 1) $/;"	d
+add	/home/philip/dev/asm-dos/src/fire1.asm	/^    add di, FIRE_WIDTH * (FIRE_HEIGHT - 1)$/;"	d
+animate_bottom_row	/home/philip/dev/asm-dos/src/fire1.asm	/^animate_bottom_row:$/;"	l
+calc_fire_offset	/home/philip/dev/asm-dos/src/fire1.asm	/^calc_fire_offset:$/;"	l
+calc_offset	/home/philip/dev/asm-dos/src/fire1.asm	/^calc_offset:$/;"	l
+chars	/home/philip/dev/asm-dos/src/fire1.asm	/^chars     db ' ', '.', '*', '+', '#'$/;"	d
+check_q	/home/philip/dev/asm-dos/src/fire1.asm	/^check_q:$/;"	l
+colors	/home/philip/dev/asm-dos/src/fire1.asm	/^colors    db COLOR_NORMAL, COLOR_GRAY, COLOR_RED, COLOR_YELLOW, COLOR_WHITE$/;"	d
+copy_pattern_loop	/home/philip/dev/asm-dos/src/fire1.asm	/^.copy_pattern_loop:$/;"	l
+current_pattern	/home/philip/dev/asm-dos/src/fire1.asm	/^current_pattern db 0$/;"	d
+delay	/home/philip/dev/asm-dos/src/fire1.asm	/^delay:$/;"	l
+done	/home/philip/dev/asm-dos/src/fire1.asm	/^.done:$/;"	l
+draw_fire	/home/philip/dev/asm-dos/src/fire1.asm	/^draw_fire:$/;"	l
+exit_program	/home/philip/dev/asm-dos/src/fire1.asm	/^exit_program:$/;"	l
+fill_row_loop	/home/philip/dev/asm-dos/src/fire1.asm	/^.fill_row_loop:$/;"	l
+find_current_pattern	/home/philip/dev/asm-dos/src/fire1.asm	/^find_current_pattern:$/;"	l
+find_pattern_loop	/home/philip/dev/asm-dos/src/fire1.asm	/^.find_pattern_loop:$/;"	l
+fire_buffer	/home/philip/dev/asm-dos/src/fire1.asm	/^fire_buffer:$/;"	l
+fire_patterns	/home/philip/dev/asm-dos/src/fire1.asm	/^fire_patterns:$/;"	l
+inc	/home/philip/dev/asm-dos/src/fire1.asm	/^    inc dh                  ; next screen row$/;"	d
+inc	/home/philip/dev/asm-dos/src/fire1.asm	/^    inc di                  ; next destination cell$/;"	d
+inc	/home/philip/dev/asm-dos/src/fire1.asm	/^    inc di$/;"	d
+inc	/home/philip/dev/asm-dos/src/fire1.asm	/^    inc dl                  ; next screen column$/;"	d
+inc_current_pattern	/home/philip/dev/asm-dos/src/fire1.asm	/^inc_current_pattern:$/;"	l
+init_fire	/home/philip/dev/asm-dos/src/fire1.asm	/^init_fire: $/;"	l
+init_screen	/home/philip/dev/asm-dos/src/fire1.asm	/^init_screen:$/;"	l
+loop_a	/home/philip/dev/asm-dos/src/fire1.asm	/^.loop_a:$/;"	l
+loop_b	/home/philip/dev/asm-dos/src/fire1.asm	/^.loop_b:$/;"	l
+loop_cols	/home/philip/dev/asm-dos/src/fire1.asm	/^.loop_cols:$/;"	l
+loop_rows	/home/philip/dev/asm-dos/src/fire1.asm	/^.loop_rows:$/;"	l
+main_loop	/home/philip/dev/asm-dos/src/fire1.asm	/^main_loop:$/;"	l
+mov	/home/philip/dev/asm-dos/src/fire1.asm	/^    mov di, ax$/;"	d
+mov	/home/philip/dev/asm-dos/src/fire1.asm	/^    mov di, fire_buffer$/;"	d
+mov	/home/philip/dev/asm-dos/src/fire1.asm	/^    mov dl, 0                 ; reset col counter.$/;"	d
+no_heat	/home/philip/dev/asm-dos/src/fire1.asm	/^.no_heat:$/;"	l
+no_key	/home/philip/dev/asm-dos/src/fire1.asm	/^.no_key:$/;"	l
+org	/home/philip/dev/asm-dos/src/fire1.asm	/^org 0x100$/;"	l
+put_char_at	/home/philip/dev/asm-dos/src/fire1.asm	/^put_char_at:$/;"	l
+set_heat_at	/home/philip/dev/asm-dos/src/fire1.asm	/^set_heat_at:$/;"	l
+start	/home/philip/dev/asm-dos/src/fire1.asm	/^start:$/;"	l
+update_fire	/home/philip/dev/asm-dos/src/fire1.asm	/^update_fire:$/;"	l
+xor	/home/philip/dev/asm-dos/src/fire1.asm	/^    xor dx, dx                ; DH = row, DL = col$/;"	d
