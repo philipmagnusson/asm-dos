@@ -1,19 +1,30 @@
-; circle.asm
+; ball.asm
 ;
-; Draw a circle in 13h video mode
+; Draw 5 balls bouncing arround. 
 org 0x100
-
 
 ; =========================================================
 ; Constants
 ; =========================================================
-SCREEN_WIDTH        equ 300
-SCREEN_HEIGTH       equ 200
+SCREEN_WIDTH        equ 320
+SCREEN_HEIGHT       equ 200
+BALL_COUNT          equ 5
 BALL_SIZE_PIXELS    equ 7
+BALL_SIZE_PIXELS_SQ equ BALL_SIZE_PIXELS * BALL_SIZE_PIXELS
 BALL_MAX_X          equ SCREEN_WIDTH - BALL_SIZE_PIXELS
-BALL_MAX_Y          equ SCREEN_HEIGTH - BALL_SIZE_PIXELS
+BALL_MAX_Y          equ SCREEN_HEIGHT - BALL_SIZE_PIXELS
 BALL_MIN_X          equ 0
 BALL_MIN_Y          equ 0
+
+; =========================================================
+; Structs
+; =========================================================
+BALL_X              equ 0   ; word
+BALL_Y              equ 2   ; word
+BALL_VX             equ 4   ; word
+BALL_VY             equ 6   ; word
+BALL_COLOR          equ 8   ; byte
+BALL_SIZE           equ 9
 
 ; =========================================================
 ; Program entrypoint
@@ -21,79 +32,208 @@ BALL_MIN_Y          equ 0
 call init_screen
 
 main_loop:
-    call draw_ball 
+    call draw_all_balls 
     call delay
-    call update_ball
+    call update_all_balls
+    call collide_all_balls
     jmp main_loop
-
-; wait for key
-
-call exit_program
-
 
 ; =========================================================
 ; Ball routines
 ; =========================================================
 
 ; ----------------------------------------------------------
+; draw_all_balls
+;
+; Destroys:
+;    AX, BX, CX, DX, DI, SI
+draw_all_balls:
+    mov si, balls
+    mov cx, BALL_COUNT
+
+.draw_loop:
+    push cx
+
+    call draw_ball
+
+    pop cx
+
+    add si, BALL_SIZE
+    loop .draw_loop
+
+    ret
+
+; ----------------------------------------------------------
+; update_all_balls
+;
+; Destroys:
+;    AX, BX, CX, DX, DI, SI
+update_all_balls:
+    mov si, balls
+    mov cx, BALL_COUNT
+
+.update_loop:
+    push cx
+
+    call update_ball
+
+    pop cx
+
+    add si, BALL_SIZE
+    loop .update_loop
+
+    ret
+
+; ----------------------------------------------------------
+; collide_all_balls
+; 
+; Calls check_collision for each ball pair. The logic is:
+;
+; 0 => 1,2,3,4
+; 1 => 2,3,4
+; 2 => 3,4
+; 3 => 4
+; 
+; Destroys:
+;   AX, CX, SI, DI 
+collide_all_balls:
+    mov si, balls
+
+    ; CX = BALL_COUNT - 1
+    mov cx, BALL_COUNT
+    dec cx
+
+.outer_loop:
+    push cx
+
+    ; DI = next ball after si
+    mov di, si
+    add di, BALL_SIZE
+    
+.inner_loop:
+    call check_collision
+    
+    ; DI = DI +  BALL_SIZE
+    add di, BALL_SIZE
+    
+    loop .inner_loop
+    
+    ; SI = SI + BALL_SIZE
+    add si, BALL_SIZE
+
+    pop cx
+    loop .outer_loop
+
+ret
+
+; ----------------------------------------------------------
+; check_collision
+;
+; Check if two balls collide.
+;
+; logic:
+; 
+; Collision if 
+;
+; abs(ball1.x - ball2.x) < 7 && abs(ball1.y - ball2.y) < 7
+;
+; Inputs:
+;   SI, DI = ball 1 and 2
+;
+; Destroys:
+;   AX, BX
+check_collision:
+    mov ax, [si + BALL_X]
+    sub ax, [di + BALL_X]
+    call abs1
+    
+    cmp ax, BALL_SIZE_PIXELS
+    jae .done
+
+    mov ax, [si + BALL_Y]
+    sub ax, [di + BALL_Y]
+
+    call abs1
+    cmp ax, BALL_SIZE_PIXELS
+    jae .done
+    
+    mov ax, [si + BALL_VX]
+    mov bx, [di + BALL_VX]
+    
+    mov [si + BALL_VX], bx
+    mov [di + BALL_VX], ax
+
+    mov ax, [si + BALL_VY]
+    mov bx, [di + BALL_VY]
+    
+    mov [si + BALL_VY], bx
+    mov [di + BALL_VY], ax
+
+.done:
+    ret 
+
+; ----------------------------------------------------------
 ; update_ball
 ;
 ; Destroys:
-;    
+;    AX, BX, CX, DX, DI
 update_ball:
     ; erase ball
     mov cl, 0x00
     call draw_ball_color
 
     ; update position
-    mov ax, [ball_vx]
-    add [ball_x], ax
+    mov ax, [si + BALL_VX]
+    add [si + BALL_X], ax
 
-    mov ax, [ball_vy]
-    add [ball_y], ax
+    mov ax, [si + BALL_VY]
+    add [si + BALL_Y], ax
 
-    cmp word [ball_x], BALL_MIN_X
+    cmp word [si + BALL_X], BALL_MIN_X
     jl .bounce_right
 
-    cmp word [ball_x], BALL_MAX_X
+    cmp word [si + BALL_X], BALL_MAX_X
     jg .bounce_left
 
 .check_vertical:
-    cmp word [ball_y], BALL_MIN_Y
+    cmp word [si + BALL_Y], BALL_MIN_Y
     jl .bounce_down
 
-    cmp word [ball_y], BALL_MAX_Y
+    cmp word [si + BALL_Y], BALL_MAX_Y
     jg .bounce_up
 
     ret
 
 .bounce_right:
-    mov word [ball_x], BALL_MIN_X
-    neg word [ball_vx]
+    mov word [si + BALL_X], BALL_MIN_X
+    neg word [si + BALL_VX]
     jmp .check_vertical
 
 .bounce_left:
-    mov word [ball_x], BALL_MAX_X
-    neg word [ball_vx]
+    mov word [si + BALL_X], BALL_MAX_X
+    neg word [si + BALL_VX]
     jmp .check_vertical
 
 .bounce_down:
-    mov word [ball_y], BALL_MIN_Y
-    neg word [ball_vy]
+    mov word [si + BALL_Y], BALL_MIN_Y
+    neg word [si + BALL_VY]
     ret
 
 .bounce_up:
-    mov word [ball_y], BALL_MAX_Y 
-    neg word [ball_vy]
+    mov word [si + BALL_Y], BALL_MAX_Y 
+    neg word [si + BALL_VY]
     ret
 
 ; ----------------------------------------------------------
 ; draw_ball
-;
+; 
+; Inputs:
+;    SI = ball
+; 
 ; Destroys:
-;    AX, BX, CX, DX, DI, SI
+;    AX, BX, CX, DX, DI 
 draw_ball:
-    mov cl, [ball_color]
+    mov cl, [si + BALL_COLOR]
     call draw_ball_color
     ret
 
@@ -101,12 +241,13 @@ draw_ball:
 ; draw_ball_color
 ;
 ; Inputs:
+;    SI = ball
 ;    CL = color
 ; Destroys:
-;    AX, BX, CX, DX, DI, SI
+;    AX, BX, CX, DX, DI 
 draw_ball_color:
-    mov bx, [ball_x]
-    mov dl, [ball_y]
+    mov bx, [si + BALL_X]
+    mov dl, [si + BALL_Y]
     call draw_circle
     ret
 
@@ -118,10 +259,14 @@ draw_ball_color:
 ;    DL = y
 ;    CL = color
 ;
+; Preserves:
+;    SI
 ; Destroys:
-;    AX, BX, CX, DX, DI, SI
+;    AX, BX, CX, DX, DI
 ;
 draw_circle:
+    push si
+
     mov [ball_draw_x], bx
     mov [ball_draw_y], dl 
     mov [ball_draw_color], cl
@@ -167,8 +312,9 @@ draw_circle:
     jmp .y_loop
 
 .done:
-    ret
 
+    pop si
+    ret
 
 ; =========================================================
 ; Graphics routines
@@ -248,7 +394,7 @@ debug_pixel:
 ; Destroys:
 ;    CX
 delay:
-    mov cx, 0x1FFF
+    mov cx, 0xFFFF
 .loop:
     loop .loop
     ret
@@ -285,6 +431,26 @@ exit_program:
     mov ax, 0x4C00
     int 0x21
 
+
+; =========================================================
+; Utils
+; =========================================================
+
+; ----------------------------------------------------------
+; abs1
+; 
+; Inputs:
+;    AX
+;
+; Outputs:
+;    AX = abs(AX)
+abs1:
+    cmp ax, 0
+    jge .done
+    neg ax
+.done
+    ret
+
 ; =========================================================
 ; Data
 ; =========================================================
@@ -298,12 +464,36 @@ circle_mask:
     db 0, 1, 1, 1, 1, 1, 0
     db 0, 0, 1, 1, 1, 0, 0
 
-ball_x      dw 100
-ball_y      dw 100
-ball_vx     dw 2
-ball_vy     dw 1
-ball_color  db 0x0F
+balls:
+    dw 40   ; x
+    dw 30   ; y
+    dw 2    ; vx
+    dw 0    ; vy
+    db 0x0F ; color
 
+    dw 100  ; x
+    dw 70   ; y
+    dw -2   ; vx
+    dw 2    ; vy
+    db 0x0E ; color
+
+    dw 200  ; x
+    dw 100  ; y
+    dw 3    ; vx
+    dw -2   ; vy
+    db 0x0B ; color
+
+    dw 150  ; x
+    dw 150  ; y
+    dw 1    ; vx
+    dw 3    ; vy
+    db 0x0C ; color
+
+    dw 20   ; x
+    dw 170  ; y
+    dw -1   ; vx
+    dw -2   ; vy
+    db 0x0D ; color
 ; --------------------------------------------------------
 ; Local variables
 ;
